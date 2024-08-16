@@ -1,17 +1,15 @@
-import { ProviderClientContext } from "@/src/contexts/providers/ProviderClient/ProviderClient";
 import { AuthContext } from "@/src/contexts/providers/ProviderAuth";
 import { _UserProfile } from "@/data-schema";
 import { useContext, useEffect, useState, useCallback } from "react";
 
-// import { useNavigate } from "react-router-dom";
-// import { ROUTES } from "@/src/contexts/routes";
-import { UserProfileUpdateForm } from "@/src/components";
+import { Schema } from "@/data-schema";
+import { generateClient } from "aws-amplify/data";
 
 export default function UserProfile() {
   const { state: auth } = useContext(AuthContext);
   const [profile, setProfile] = useState<_UserProfile>();
-  const client = useContext(ProviderClientContext);
-  //   const nav = useNavigate();
+  const client = generateClient<Schema>();
+
   const getProfile = useCallback(async () => {
     const { data: profiles } = await client.models.UserProfile.list({
       filter: {
@@ -25,29 +23,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     getProfile();
-  }, [client.models.UserProfile, auth, getProfile]);
+  }, [client.models.UserProfile, auth]);
 
-  return (
-    <UserProfileUpdateForm
-      userProfile={profile}
-      overrides={{
-        uuid: {
-          display: "none",
-          disabled: true,
-        },
-        email: {
-          display: "none",
-          disabled: true,
-        },
-        profileOwner: {
-          display: "none",
-          disabled: true,
-        },
-        avatar: {
-          display: "none",
-          disabled: true,
-        },
-      }}
-    />
-  );
+  return <>testbug</>;
 }
